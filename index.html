@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Por el poder de los sistemas de ecuaciones de Grayskull - Escape room Matemático</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Tipografías fantasy -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=MedievalSharp&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Cinzel', serif;
+      background: radial-gradient(circle at top, #2b2b5f, #0f0f1f);
+      color: #f5f5dc;
+    }
+    header {
+      background: linear-gradient(90deg, #3a3a8a, #1f1f4a);
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px #000;
+    }
+    main { padding: 1rem; max-width: 900px; margin: auto; }
+    h2, h3 { font-family: 'MedievalSharp', cursive; letter-spacing: 1px; }
+    .hidden { display: none; }
+    .card {
+      background: rgba(0,0,0,0.6);
+      padding: 1.2rem;
+      border-radius: 14px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 15px rgba(255,215,0,0.3);
+    }
+    button {
+      background: linear-gradient(#c9a227, #8b6b14);
+      color: #000;
+      border: none;
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 0.3rem 0.2rem;
+      font-family: 'Cinzel', serif;
+    }
+    button:hover { background: linear-gradient(#ffd700, #c9a227); }
+    .timer {
+      font-size: 1.1rem;
+      font-weight: bold;
+      text-align: right;
+      margin-bottom: 0.5rem;
+      color: #ffd700;
+    }
+    select, input { padding: 0.4rem; margin: 0.2rem 0; width: 100%; max-width: 200px; }
+    iframe, img { max-width: 100%; border-radius: 10px; margin: 0.5rem 0; }
+    .error { color: #ff9999; font-weight: bold; }
+    .feedback { color: #9fd3ff; margin-top: 0.5rem; font-size: 0.9rem; }
+    .teacher { background: rgba(255,255,255,0.08); padding: 0.6rem; border-radius: 8px; margin-top: 0.6rem; font-size: 0.85rem; color: #c9e6ff; }
+    @media (max-width: 600px) { header { font-size: 1.2rem; } button { width: 100%; } }
+  </style>
+</head>
+<body>
+<header>⚔️ Por el poder de los sistemas de ecuaciones de Grayskull – Escape room Matemático ⚔️</header>
+<main>
+
+<section id="start">
+  <div class="card">
+    <h2>La amenaza de Skeletor</h2>
+    <p>Skeletor ha sellado Grayskull con cuatro cerraduras matemáticas.</p>
+    <button onclick="startGame(60)">⏱️ 60 minutos</button>
+    <button onclick="startGame(90)">⏱️ 90 minutos</button>
+    <hr>
+    <input type="password" id="teacherPass" placeholder="Modo profesor">
+    <button onclick="toggleTeacher()">Activar</button>
+  </div>
+</section>
+
+<section id="p1" class="hidden"><div class="timer"></div><div class="card"><h2>Trap Jaw</h2><p>2x + y - z = 5<br>4x + 2y - 2z = 10<br>2x + y - z = 7</p><select id="p1type" onchange="toggleSolution('p1')"><option value="">Tipo</option><option value="none">Sin solución</option><option value="inf">Infinitas</option><option value="one">Única</option></select><div id="p1sol" class="hidden"></div><button onclick="checkP1()">Comprobar</button><p id="p1error" class="error hidden">Incorrecto</p><div class="teacher hidden">Incompatible</div></div></section>
+
+<section id="p2" class="hidden"><div class="timer"></div><div class="card"><h2>Beast Man</h2><p>x + 2y + z = 10<br>2x + 4y + 2z = 20<br>3x + 6y + 3z = 30</p><select id="p2type" onchange="toggleSolution('p2')"><option value="">Tipo</option><option value="none">Sin solución</option><option value="inf">Infinitas</option><option value="one">Única</option></select><div id="p2sol" class="hidden"></div><button onclick="checkP2()">Comprobar</button><p id="p2error" class="error hidden">Incorrecto</p><div class="teacher hidden">Indeterminado</div></div></section>
+
+<section id="p3" class="hidden"><div class="timer"></div><div class="card"><h2>Evil-Lyn</h2><p>2x + y + z = 13<br>x + 2y + z = 14<br>x + y + 2z = 15</p><select id="p3type" onchange="toggleSolution('p3')"><option value="">Tipo</option><option value="none">Sin solución</option><option value="inf">Infinitas</option><option value="one">Única</option></select><div id="p3sol" class="hidden"><input id="p3x" placeholder="x"><input id="p3y" placeholder="y"><input id="p3z" placeholder="z"></div><button onclick="checkP3()">Comprobar</button><p id="p3error" class="error hidden">Incorrecto</p><div class="teacher hidden">(3,4,5)</div></div></section>
+
+<section id="p4" class="hidden"><div class="timer"></div><div class="card"><h2>Skeletor</h2><p>2x + y + z = 11<br>x + 3y + z = 13<br>x + y + 4z = 19</p><select id="p4type" onchange="toggleSolution('p4')"><option value="">Tipo</option><option value="none">Sin solución</option><option value="inf">Infinitas</option><option value="one">Única</option></select><div id="p4sol" class="hidden"><input id="p4x" placeholder="x"><input id="p4y" placeholder="y"><input id="p4z" placeholder="z"></div><button onclick="checkP4()">Comprobar</button><p id="p4error" class="error hidden">Incorrecto</p><div class="teacher hidden">(2,3,4)</div></div></section>
+
+<section id="lock" class="hidden"><div class="timer"></div><div class="card"><h2>🔐 Candado final</h2><input id="c1"><input id="c2"><input id="c3"><input id="c4"><button onclick="checkLock()">Abrir</button></div></section>
+
+<section id="success" class="hidden"><div class="card"><h2>🌟 Victoria</h2></div></section>
+<section id="fail" class="hidden"><div class="card"><h2>💀 Skeletor ha vencido</h2><button onclick="resetGame()">Intentarlo de nuevo</button></div></section>
+
+</main>
+
+<script>
+let timeLeft, interval;
+
+function startGame(min) {
+  timeLeft = min * 60;
+  show('p1');
+  interval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  if (timeLeft <= 0) {
+    clearInterval(interval);
+    show('fail');
+    return;
+  }
+  timeLeft--;
+  document.querySelectorAll('.timer').forEach(t => t.textContent = `⏳ ${Math.floor(timeLeft/60)}:${String(timeLeft%60).padStart(2,'0')}`);
+}
+
+function resetGame() {
+  clearInterval(interval);
+  document.querySelectorAll('input').forEach(i => i.value = '');
+  show('start');
+}
+
+function show(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function toggleTeacher() {
+  if (teacherPass.value === 'PROFE') document.querySelectorAll('.teacher').forEach(e => e.classList.remove('hidden'));
+}
+
+function toggleSolution(pid) {
+  const type = document.getElementById(pid + 'type').value;
+  const sol = document.getElementById(pid + 'sol');
+  if (sol) sol.classList.toggle('hidden', type !== 'one');
+}
+
+function checkP1(){ p1type.value==='none' ? show('p2') : p1error.classList.remove('hidden'); }
+function checkP2(){ p2type.value==='inf' ? show('p3') : p2error.classList.remove('hidden'); }
+function checkP3(){ (p3type.value==='one' && +p3x.value===3 && +p3y.value===4 && +p3z.value===5) ? show('p4') : p3error.classList.remove('hidden'); }
+function checkP4(){ (p4type.value==='one' && +p4x.value===2 && +p4y.value===3 && +p4z.value===4) ? show('lock') : p4error.classList.remove('hidden'); }
+
+function checkLock(){ clearInterval(interval); (c1.value==='INCOMPATIBLE' && c2.value==='INDETERMINADO' && c3.value==='345' && c4.value==='234') ? show('success') : show('fail'); }
+</script>
+</body>
+</html>
