@@ -159,6 +159,8 @@
 
 <script>
 let timeLeft, interval;
+// Contadores de intentos por reto
+let attempts = { p1: 0, p2: 0, p3: 0, p4: 0 };
 
 function loadVideo(el, id) {
   el.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
@@ -183,6 +185,7 @@ function updateTimer() {
 function resetGame() {
   clearInterval(interval);
   document.querySelectorAll('input').forEach(i => i.value = '');
+  attempts = { p1: 0, p2: 0, p3: 0, p4: 0 };
   show('start');
 }
 
@@ -202,31 +205,61 @@ function toggleSolution(pid) {
 }
 
 function checkP1(){
+  attempts.p1++;
   const fb = document.getElementById('p1fb');
   p1error.classList.add('hidden'); fb.classList.add('hidden');
   if(p1type.value==='none'){ show('p2'); return; }
+  p1error.classList.remove('hidden');
+  if(attempts.p1 >= 2){
+    fb.classList.remove('hidden');
+    fb.textContent = 'Pista: dos ecuaciones son proporcionales, pero la tercera rompe esa proporción. Revisa los términos independientes.';
+  }
+}
   p1error.classList.remove('hidden'); fb.classList.remove('hidden');
   fb.textContent = 'Pista: dos ecuaciones son proporcionales, pero la tercera rompe esa proporción. Revisa los términos independientes.';
 }
 function checkP2(){
+  attempts.p2++;
   const fb = document.getElementById('p2fb');
   p2error.classList.add('hidden'); fb.classList.add('hidden');
   if(p2type.value==='inf'){ show('p3'); return; }
+  p2error.classList.remove('hidden');
+  if(attempts.p2 >= 2){
+    fb.classList.remove('hidden');
+    fb.textContent = 'Pista: todas las ecuaciones son múltiplos entre sí. Piensa qué implica eso sobre el conjunto de soluciones.';
+  }
+}
   p2error.classList.remove('hidden'); fb.classList.remove('hidden');
   fb.textContent = 'Pista: todas las ecuaciones son múltiplos entre sí. Piensa qué implica eso sobre el rango del sistema.';
 }
 function checkP3(){
+  attempts.p3++;
   const fb = document.getElementById('p3fb');
   p3error.classList.add('hidden'); fb.classList.add('hidden');
   if(p3type.value==='one' && +p3x.value===3 && +p3y.value===4 && +p3z.value===5){ show('p4'); return; }
+  p3error.classList.remove('hidden');
+  if(attempts.p3 >= 2){
+    fb.classList.remove('hidden');
+    if(p3type.value!=='one') fb.textContent = 'Pista: las ecuaciones no son proporcionales entre sí. El sistema puede resolverse.';
+    else fb.textContent = 'Pista: comprueba tu solución sustituyendo en una de las ecuaciones.';
+  }
+}
   p3error.classList.remove('hidden'); fb.classList.remove('hidden');
   if(p3type.value!=='one') fb.textContent = 'Pista: las tres ecuaciones no son proporcionales. El sistema se puede resolver por reducción o Gauss.';
   else fb.textContent = 'Pista: sustituye la solución en una de las ecuaciones para comprobarla.';
 }
 function checkP4(){
+  attempts.p4++;
   const fb = document.getElementById('p4fb');
   p4error.classList.add('hidden'); fb.classList.add('hidden');
   if(p4type.value==='one' && +p4x.value===2 && +p4y.value===3 && +p4z.value===4){ show('lock'); return; }
+  p4error.classList.remove('hidden');
+  if(attempts.p4 >= 2){
+    fb.classList.remove('hidden');
+    if(p4type.value!=='one') fb.textContent = 'Pista: reflexiona si el sistema admite una única solución.';
+    else fb.textContent = 'Pista: revisa los pasos intermedios del cálculo.';
+  }
+}
   p4error.classList.remove('hidden'); fb.classList.remove('hidden');
   if(p4type.value!=='one') fb.textContent = 'Pista: revisa si el determinante del sistema es distinto de cero.';
   else fb.textContent = 'Pista: revisa los cálculos intermedios, especialmente al despejar una incógnita.';
@@ -236,3 +269,4 @@ function checkLock(){ clearInterval(interval); (c1.value==='INCOMPATIBLE' && c2.
 </script>
 </body>
 </html>
+
